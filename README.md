@@ -547,3 +547,401 @@ Logical Data Independence  → Change WHAT
 Schema   → Structure
 Instance → Current Data
 ```
+# 📚 DBMS — Keys
+
+> **Lecture Topic:** Keys in DBMS
+> **Goal:** Understand how keys identify records and connect tables.
+
+---
+
+## 1. 🔑 What is a Key?
+
+A **key** is an attribute or combination of attributes used to **uniquely identify a record (row)** in a table.
+
+### Example
+
+| Student_ID | Name  | Email                             |
+| ---------- | ----- | --------------------------------- |
+| 101        | Rahul | [r@gmail.com](mailto:r@gmail.com) |
+| 102        | Aman  | [a@gmail.com](mailto:a@gmail.com) |
+| 103        | Priya | [p@gmail.com](mailto:p@gmail.com) |
+
+`Student_ID` can uniquely identify each student.
+
+---
+
+# 2. ⭐ Super Key
+
+A **Super Key** is **any attribute or combination of attributes that can uniquely identify a row**.
+
+Example:
+
+```text
+{Student_ID}          → Super Key
+{Email}               → Super Key
+{Student_ID, Name}    → Super Key
+{Student_ID, Email}   → Super Key
+```
+
+### Important
+
+A Super Key may contain **unnecessary attributes**.
+
+Example:
+
+```text
+{Student_ID, Name}
+```
+
+If `Student_ID` alone is enough, then `Name` is unnecessary.
+
+### 🧠 Memory Trick
+
+> **Super Key = Unique + Maybe Extra**
+
+---
+
+# 3. 🎯 Candidate Key
+
+A **Candidate Key** is a **minimal Super Key**.
+
+It must:
+
+1. Uniquely identify a row.
+2. Have **no unnecessary attribute**.
+
+Example:
+
+```text
+{Student_ID} → Candidate Key ✅
+{Email}      → Candidate Key ✅
+```
+
+But:
+
+```text
+{Student_ID, Name}
+```
+
+is **not** a Candidate Key because `Name` is unnecessary.
+
+### 🧠 Memory Trick
+
+> **Candidate Key = Super Key − Extra Attributes**
+
+---
+
+# 4. 🏆 Primary Key
+
+A **Primary Key** is the **Candidate Key selected by the database designer** as the main key.
+
+Suppose:
+
+```text
+Candidate Keys:
+Student_ID
+Email
+Aadhaar_No
+```
+
+If we choose:
+
+```text
+Email → Primary Key
+```
+
+then `Email` becomes the Primary Key.
+
+### Important properties
+
+* Uniquely identifies each row.
+* Cannot contain NULL values.
+* Only one Primary Key is selected for a table.
+
+### 🧠 Memory Trick
+
+> **Candidate Keys = Choices**
+> **Primary Key = Selected Choice**
+
+---
+
+# 5. 🔄 Alternate Key
+
+The Candidate Keys that are **not selected as the Primary Key** are called **Alternate Keys**.
+
+Example:
+
+```text
+Candidate Keys:
+Student_ID
+Email
+Aadhaar_No
+```
+
+If:
+
+```text
+Email → Primary Key
+```
+
+then:
+
+```text
+Student_ID → Alternate Key
+Aadhaar_No  → Alternate Key
+```
+
+### 🧠 Memory Trick
+
+> **Primary = Selected**
+> **Alternate = Remaining Candidates**
+
+---
+
+# 6. 🔗 Foreign Key (FK)
+
+A **Foreign Key** is an attribute in one table that **refers to a key in another table**, commonly the Primary Key.
+
+### Example
+
+### Student
+
+| Student_ID | Name  |
+| ---------- | ----- |
+| 101        | Rahul |
+| 102        | Aman  |
+
+`Student_ID` → Primary Key
+
+### Enrollment
+
+| Enrollment_ID | Student_ID | Course |
+| ------------- | ---------- | ------ |
+| 1             | 101        | DBMS   |
+| 2             | 101        | OOP    |
+| 3             | 102        | DBMS   |
+
+Here:
+
+```text
+Enrollment.Student_ID
+          ↓
+   refers to
+          ↓
+Student.Student_ID
+```
+
+Therefore:
+
+> `Enrollment.Student_ID` = **Foreign Key**
+
+### What does `101` mean?
+
+It means:
+
+> "This enrollment belongs to the student whose ID is 101."
+
+And:
+
+```text
+101 → Rahul
+```
+
+So `101` refers to **Rahul**.
+
+### Important
+
+A Foreign Key **can repeat**:
+
+```text
+101 → DBMS
+101 → OOP
+```
+
+That's valid because the same student can have multiple enrollments.
+
+### 🧠 Memory Trick
+
+> **PK = Identifies**
+> **FK = References / Connects**
+
+---
+
+# 7. 🧩 Composite Key
+
+A **Composite Key** consists of **two or more attributes together** that uniquely identify a row.
+
+### Example
+
+| Student_ID | Course_ID | Marks |
+| ---------- | --------- | ----: |
+| 101        | C01       |    80 |
+| 101        | C02       |    75 |
+| 102        | C01       |    90 |
+
+Neither column alone is unique:
+
+```text
+Student_ID → repeats ❌
+Course_ID  → repeats ❌
+```
+
+But together:
+
+```text
+(Student_ID, Course_ID)
+```
+
+uniquely identifies each row.
+
+Therefore:
+
+> `(Student_ID, Course_ID)` = **Composite Key**
+
+---
+
+## 🔥 Composite Key Can Have More Than 2 Columns
+
+Example:
+
+| Student_ID | Course_ID | Semester |
+| ---------- | --------- | -------- |
+| 101        | C01       | 1        |
+| 101        | C01       | 2        |
+| 101        | C02       | 1        |
+| 102        | C01       | 1        |
+
+Here:
+
+```text
+(Student_ID, Course_ID)
+```
+
+is **not enough** because:
+
+```text
+(101, C01)
+(101, C01)
+```
+
+repeats.
+
+But:
+
+```text
+(Student_ID, Course_ID, Semester)
+```
+
+is unique.
+
+Therefore, all three together can form a **Composite Key**.
+
+### 🧠 Memory Trick
+
+> **Composite = Combination**
+
+---
+
+# 🔥 Complete Key Relationship
+
+```text
+                SUPER KEY
+                    ↓
+          Remove unnecessary attributes
+                    ↓
+             CANDIDATE KEY
+                    ↓
+             Choose one
+                    ↓
+             PRIMARY KEY
+                    ↓
+     Remaining Candidate Keys
+                    ↓
+            ALTERNATE KEYS
+```
+
+And separately:
+
+```text
+PRIMARY KEY
+     ↑
+     │ refers to
+     │
+FOREIGN KEY
+```
+
+---
+
+# 🧠 Quick Comparison
+
+| Key               | Main Purpose                                |
+| ----------------- | ------------------------------------------- |
+| **Super Key**     | Uniquely identifies a row                   |
+| **Candidate Key** | Minimal Super Key                           |
+| **Primary Key**   | Selected Candidate Key                      |
+| **Alternate Key** | Candidate Key not selected                  |
+| **Foreign Key**   | References another table's key              |
+| **Composite Key** | Multiple attributes together identify a row |
+
+---
+
+# ⚡ Memory Tricks
+
+> **Super → Unique + Maybe Extra**
+
+> **Candidate → Unique + No Extra**
+
+> **Primary → Selected Candidate**
+
+> **Alternate → Remaining Candidate**
+
+> **Foreign → Reference another table**
+
+> **Composite → Combination of attributes**
+
+---
+
+# 🎯 Quick Revision
+
+### Q1. Can a Super Key contain unnecessary attributes?
+
+**Yes.** ✅
+
+### Q2. Is every Candidate Key a Super Key?
+
+**Yes.** ✅
+
+### Q3. Is every Super Key a Candidate Key?
+
+**No.** ❌
+
+### Q4. How many Primary Keys can a table have?
+
+**One Primary Key.**
+
+### Q5. Can a Foreign Key repeat?
+
+**Yes.** ✅
+
+### Q6. Can a Composite Key contain 3 attributes?
+
+**Yes.** ✅
+
+### Q7. What does a Foreign Key do?
+
+**It references a key in another table and helps establish a relationship between tables.**
+
+---
+
+## 🏁 Today's Core Takeaway
+
+```text
+Super Key       → Any unique identifier
+Candidate Key   → Minimal unique identifier
+Primary Key     → Selected candidate
+Alternate Key   → Unselected candidate
+Foreign Key     → Reference to another table
+Composite Key   → Multiple columns working together
+```
+
+**Today's DBMS topic: ✅ Keys completed**
