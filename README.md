@@ -945,3 +945,545 @@ Composite Key   → Multiple columns working together
 ```
 
 **Today's DBMS topic: ✅ Keys completed**
+# 📚 DBMS — SQL Commands & Constraints
+
+> **Lecture Topic:** Constraints + SQL Command Categories
+> **Goal:** Understand how SQL manages table structure and data.
+
+---
+
+# 1. 🛡️ Constraints
+
+A **constraint** is a rule applied to a table/column to control what data can be stored.
+
+> **Constraint = Rule for the data**
+
+### Why constraints?
+
+They help maintain **Data Integrity** and prevent invalid data.
+
+---
+
+## 🔹 NOT NULL
+
+Prevents a column from containing `NULL`.
+
+```sql
+Name VARCHAR(50) NOT NULL
+```
+
+```text
+Rahul → ✅
+Aman  → ✅
+NULL  → ❌
+```
+
+### Memory Trick
+
+> **NOT NULL = Value is compulsory**
+
+---
+
+## 🔹 UNIQUE
+
+Prevents duplicate values.
+
+```sql
+Email VARCHAR(100) UNIQUE
+```
+
+```text
+rahul@gmail.com → ✅
+aman@gmail.com  → ✅
+rahul@gmail.com → ❌
+```
+
+### Memory Trick
+
+> **UNIQUE = No duplicates**
+
+---
+
+## 🔹 PRIMARY KEY
+
+Uniquely identifies each row.
+
+```sql
+Student_ID INT PRIMARY KEY
+```
+
+Important:
+
+* Unique
+* Cannot contain `NULL`
+* One Primary Key per table
+
+### Memory Trick
+
+> **Primary Key = Main identity of a row**
+
+---
+
+## 🔹 FOREIGN KEY
+
+A Foreign Key refers to a key in another table and helps establish a relationship.
+
+Example:
+
+```text
+Student
+Student_ID
+   ↑
+   │
+Enrollment.Student_ID
+```
+
+```text
+Student.Student_ID       → Primary Key
+Enrollment.Student_ID    → Foreign Key
+```
+
+A Foreign Key **can repeat**.
+
+### Memory Trick
+
+> **FK = Reference / Connection**
+
+---
+
+## 🔹 CHECK
+
+Ensures a value satisfies a condition.
+
+```sql
+Age INT CHECK (Age >= 18)
+```
+
+```text
+17 → ❌
+18 → ✅
+25 → ✅
+```
+
+### Memory Trick
+
+> **CHECK = Condition must be true**
+
+---
+
+## 🔹 DEFAULT
+
+Provides a value when no value is supplied.
+
+```sql
+Status VARCHAR(20) DEFAULT 'Active'
+```
+
+If no status is given:
+
+```text
+Status → Active
+```
+
+### Memory Trick
+
+> **DEFAULT = Automatic value**
+
+---
+
+# 2. 🏗️ DDL — Data Definition Language
+
+DDL is mainly used to **define/change database structure**.
+
+### Main DDL Commands
+
+```text
+CREATE
+ALTER
+DROP
+TRUNCATE
+```
+
+### 🧠 Memory Trick
+
+> **DDL → Structure**
+
+---
+
+## 🔹 CREATE
+
+Creates a new table.
+
+```sql
+CREATE TABLE Student
+(
+    Student_ID INT PRIMARY KEY,
+    Name VARCHAR(50)
+);
+```
+
+> **CREATE = Build something new**
+
+---
+
+## 🔹 ALTER
+
+Changes the **structure** of an existing table.
+
+Example: Add a column.
+
+```sql
+ALTER TABLE Student
+ADD Email VARCHAR(100);
+```
+
+Before:
+
+```text
+Student
+├── Student_ID
+└── Name
+```
+
+After:
+
+```text
+Student
+├── Student_ID
+├── Name
+└── Email
+```
+
+> **ALTER = Change structure**
+
+---
+
+## 🔹 DROP
+
+Completely removes the table.
+
+```sql
+DROP TABLE Student;
+```
+
+Result:
+
+```text
+Table structure → ❌
+Table data      → ❌
+```
+
+> **DROP = Destroy the table**
+
+---
+
+## 🔹 TRUNCATE
+
+Removes **all rows** but keeps the table structure.
+
+```sql
+TRUNCATE TABLE Student;
+```
+
+Result:
+
+```text
+Data      → ❌
+Structure → ✅
+```
+
+> **TRUNCATE = Empty the table**
+
+---
+
+# 3. 📝 DML — Data Manipulation Language
+
+DML is used to **manipulate data inside tables**.
+
+### Main DML Commands
+
+```text
+INSERT
+UPDATE
+DELETE
+```
+
+### 🧠 Memory Trick
+
+> **DML → Data**
+
+---
+
+## 🔹 INSERT
+
+Adds a **new row**.
+
+```sql
+INSERT INTO Student (ID, Name, Age)
+VALUES (101, 'Rahul', 20);
+```
+
+> **INSERT = Add new data**
+
+---
+
+## 🔹 UPDATE
+
+Changes **existing data**.
+
+```sql
+UPDATE Student
+SET Age = 21
+WHERE ID = 101;
+```
+
+Before:
+
+```text
+101 → Rahul → 20
+```
+
+After:
+
+```text
+101 → Rahul → 21
+```
+
+> **UPDATE = Change existing data**
+
+### ⚠️ Important
+
+`WHERE` determines which rows are updated.
+
+Without a suitable `WHERE`, multiple/all rows may be updated.
+
+---
+
+## 🔹 DELETE
+
+Removes rows from a table.
+
+```sql
+DELETE FROM Student
+WHERE ID = 101;
+```
+
+> **DELETE = Remove data**
+
+Without `WHERE`:
+
+```sql
+DELETE FROM Student;
+```
+
+all rows can be deleted.
+
+---
+
+# 4. 🔍 DQL — Data Query Language
+
+DQL is used to **retrieve/read data**.
+
+Main command:
+
+```text
+SELECT
+```
+
+### 🧠 Memory Trick
+
+> **DQL → Query / Read data**
+
+---
+
+## 🔹 SELECT — All Columns
+
+```sql
+SELECT * FROM Student;
+```
+
+`*` means:
+
+> **All columns**
+
+---
+
+## 🔹 SELECT — Specific Columns
+
+```sql
+SELECT Name, Age
+FROM Student;
+```
+
+Only `Name` and `Age` are returned.
+
+---
+
+## 🔹 WHERE
+
+Used to **filter rows**.
+
+```sql
+SELECT *
+FROM Student
+WHERE ID = 101;
+```
+
+### Example
+
+```sql
+SELECT Name
+FROM Student
+WHERE Age = 20;
+```
+
+Returns students whose age is exactly `20`.
+
+### Memory Trick
+
+> **WHERE = Which rows?**
+
+---
+
+## 🔹 DISTINCT
+
+Removes duplicate values from the **result**.
+
+```sql
+SELECT DISTINCT City
+FROM Student;
+```
+
+If the data is:
+
+```text
+Delhi
+Mumbai
+Delhi
+Mumbai
+Patna
+```
+
+Result:
+
+```text
+Delhi
+Mumbai
+Patna
+```
+
+### Memory Trick
+
+> **DISTINCT = No duplicate results**
+
+---
+
+# 🔥 UPDATE vs INSERT vs ALTER
+
+This was an important confusion we cleared today.
+
+| Command  | What changes?               |
+| -------- | --------------------------- |
+| `INSERT` | Adds a new **row/data**     |
+| `UPDATE` | Changes existing **data**   |
+| `ALTER`  | Changes table **structure** |
+
+### Example
+
+```text
+INSERT → Add Priya
+UPDATE → Change Rahul's age
+ALTER  → Add Email column
+```
+
+---
+
+# 🔥 DROP vs TRUNCATE vs DELETE
+
+| Command    | Result                            |
+| ---------- | --------------------------------- |
+| `DELETE`   | Removes rows                      |
+| `TRUNCATE` | Removes all rows, keeps structure |
+| `DROP`     | Removes entire table              |
+
+### Memory Trick
+
+```text
+DELETE    → Remove data 🗑️
+TRUNCATE  → Empty table 🧹
+DROP      → Destroy table 💥
+```
+
+---
+
+# 🧠 Complete SQL Command Map
+
+```text
+                    SQL
+                     │
+          ┌──────────┼──────────┐
+          ↓          ↓          ↓
+         DDL        DML        DQL
+          │          │          │
+          ↓          ↓          ↓
+       CREATE      INSERT      SELECT
+       ALTER       UPDATE
+       DROP        DELETE
+       TRUNCATE
+```
+
+### Remember
+
+```text
+DDL → Structure 🏗️
+DML → Data 📝
+DQL → Retrieve 🔎
+```
+
+---
+
+# ⚡ Quick Revision
+
+### Constraints
+
+```text
+NOT NULL → No NULL
+UNIQUE   → No duplicates
+PRIMARY  → Main row identifier
+FOREIGN  → Reference another table
+CHECK    → Validate condition
+DEFAULT  → Automatic value
+```
+
+### SQL Commands
+
+```text
+CREATE    → Create structure
+ALTER     → Modify structure
+DROP      → Remove structure
+TRUNCATE  → Remove all rows
+INSERT    → Add row
+UPDATE    → Modify data
+DELETE    → Remove rows
+SELECT    → Retrieve data
+WHERE     → Filter rows
+DISTINCT  → Remove duplicate results
+```
+
+---
+
+# 🎯 Today's Core Takeaway
+
+> **DDL changes the structure.**
+> **DML changes the data.**
+> **DQL reads the data.**
+
+And the most important distinction:
+
+```text
+INSERT → New row
+UPDATE → Existing data
+ALTER  → Table structure
+```
+
+**Today's DBMS Session: ✅ Completed**
